@@ -7,14 +7,28 @@ function z_score = zScores(reads, varargin)
 %     contains locations in the first column and raw data values in the 
 %     second.
 %
-%   - z_score will be the 
+%   - z_score will be the z_score transformed data (ie each value will now
+%   be transformed by assuming that the values around it (to the left and
+%   right) constitute normal distributions. Each value is replaced with the
+%   minimum of its z_score from the left and right distributions. 
+%
+%  - optional variables (to use an optional variable - pass in the name as
+%  a string, followed by your desired value i.e z_s = ZSCORES(reads,
+%  'gap' 5))
+%
+%          - 'gap' is the number of spaces immediately around the
+%          nucleotide (in terms of position space not space in the array)
+%          to ignore when calculating the normal distributions. 
+%
+%          - 'num_include' is the number of values below the gap to use in
+%          calculating the normal distribution.  This is number of values
+%          in position space - so may actually end up being fewer values if
+%          reads are sparse.
 
-
-%------------------------------------------------------------
 opts = containers.Map({'gap', 'num_include'}, {5, 50});
 v = unpackVals(varargin, opts);
-gap = v(1)
-num_include = v(2)
+gap = v(1);
+num_include = v(2);
 step = gap + num_include;
 
 z_score = zeros(2, length(reads) - 2*(step));
@@ -53,18 +67,26 @@ end
 
 end
 
-function index = adjustDown(cur_val, target_val, reads)
-    while reads(1,cur_val) > target_val
-        cur_val = cur_val - 1;        
+function index = adjustDown(cur_ind, target_val, reads)
+%helper function.  Is neccesary because there are sometimes gaps in the
+%position space.  Will adjust the cur_ind down until its corresponding
+%position in reads is below target_val
+
+    while reads(1,cur_ind) > target_val
+        cur_ind = cur_ind - 1;        
     end
-    index = cur_val;
+    index = cur_ind;
 end
 
-function index = adjustUp(cur_val, target_val, reads)
-    while reads(1,cur_val) < target_val
-        cur_val = cur_val + 1;        
+function index = adjustUp(cur_ind, target_val, reads)
+%helper function.  Is neccesary because there are sometimes gaps in the
+%position space.  Will adjust the cur_ind up until its corresponding
+%position in reads is above target_val
+
+    while reads(1,cur_ind) < target_val
+        cur_ind = cur_ind + 1;        
     end
-    index = cur_val;
+    index = cur_ind;
 end
 
 

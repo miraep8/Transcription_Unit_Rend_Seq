@@ -1,12 +1,10 @@
 fname_3f = 'C:/Users/mirae/Documents/Research/Data/wig Files/Jean_3f.wig';
 reads_3f = openWig(fname_3f);
-z_score_3f = zScores2(reads_3f);
+z_score_3f = zScores(reads_3f);
 wig_track_3f = makeVertibiWig(z_score_3f);
 
-num_Peaks = sum(wig_track_3f(2,:) > 5)
 new_name = strcat(fname_3f(1:strfind(fname_3f, '.wig')-1), '_peaks.wig');
 writeWig(wig_track_3f, new_name);
-%writeWig(z_score_3f, 'C:/Users/mirae/Documents/Research/Data/wig Files/Jean_3f_zscore.wig');
 fname_3r = 'C:/Users/mirae/Documents/Research/Data/wig Files/Jean_3r.wig';
 reads_3r = openWig(fname_3r);
 z_score_3r = zScores(reads_3r);
