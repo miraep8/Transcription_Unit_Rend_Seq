@@ -10,7 +10,7 @@ function writeWig(wig_track, wig_file_name)
 %   the data in wig_track
 
     wig_track(:,wig_track(1,:) < 1) = [];
-    fileID = fopen(wig_file_name_name,'w');
+    fileID = fopen(wig_file_name,'w');
     fprintf(fileID, 'track type=wiggle_0\n');
     fprintf(fileID, 'variableStep chrom=NC_000964.3\n');
     fprintf(fileID,'%d\t%d\n',wig_track);
